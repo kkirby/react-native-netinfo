@@ -313,15 +313,17 @@ Describes the current generation of the `cellular` connection. It is an enum wit
 | `4g`      | Currently connected to a 4G cellular network. Includes HSPAP and LTE type connections                             |
 
 #### `NetInfoConfiguration`
-The configuration options for the library.
+The configuration options for the library. Only used on platforms which do not supply internet reachability natively (iOS).
 
-| Property                     | Type                              | Description                                                                                                                                                                                                                               |
-| ---------------------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `reachabilityUrl`            | `string`                          | The URL to call to test if the internet is reachable. Only used on platforms which do not supply internet reachability natively.                                                                                                          |
-| `reachabilityTest`           | `(response: Response) => boolean` | A function which is passed the `Response` from calling the reachability URL. It should return `true` if the response indicates that the internet is reachable. Only used on platforms which do not supply internet reachability natively. |
-| `reachabilityShortTimeout`   | `number`                          | The number of milliseconds between internet reachability checks when the internet was not previously detected. Only used on platforms which do not supply internet reachability natively.                                                 |
-| `reachabilityLongTimeout`    | `number`                          | The number of milliseconds between internet reachability checks when the internet was previously detected. Only used on platforms which do not supply internet reachability natively.                                                     |
-| `reachabilityRequestTimeout` | `number`                          | The number of milliseconds that a reachability check is allowed to take before failing. Only used on platforms which do not supply internet reachability natively.                                                                        |
+Android and Windows support internet reachability detection natively. On iOS, we need to do this manually ourselves. We do this by making a periodic network request to a URL which is known to generate a 204 response. If it gives a different response, then we assume that the internet is not reachable. This is the same URL and method which Chrome uses for captive portal detection.
+
+| Property                     | Type                              | Description                                                                                                                                                    |
+| ---------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `reachabilityUrl`            | `string`                          | The URL to call to test if the internet is reachable.                                                                                                          |
+| `reachabilityTest`           | `(response: Response) => boolean` | A function which is passed the `Response` from calling the reachability URL. It should return `true` if the response indicates that the internet is reachable. |
+| `reachabilityShortTimeout`   | `number`                          | The number of milliseconds between internet reachability checks when the internet was not previously detected.                                                 |
+| `reachabilityLongTimeout`    | `number`                          | The number of milliseconds between internet reachability checks when the internet was previously detected.                                                     |
+| `reachabilityRequestTimeout` | `number`                          | The number of milliseconds that a reachability check is allowed to take before failing.                                                                        |
 
 ### Methods
 
